@@ -3,10 +3,6 @@ body {
   margin: 20px;
 }
 
-ol, ul {
-  padding-left: 30px;
-}
-
 .board-row:after {
   clear: both;
   content: "";
@@ -23,23 +19,34 @@ ol, ul {
   float: left;
   font-size: 5vw;
   font-weight: bold;
-  height: 8vw;
+  height: 7vw;
   margin-right: -1px;
   margin-top: -1px;
   padding: 1vw;
   text-align: center;
-  width: 8vw;
+  width: 7vw;
 }
 
-.square:hover {
-  background-color: #abcdef;
-}
-.square:focus {
-  outline: none;
+.square {
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  transition:.5s;
 }
 
-.kbd-navigation .square:focus {
-  background: #ddd;
+.oTurn:hover { background-color:#FFCCCB; }
+
+.xTurn:hover { background-color:#ADD8E6; }
+
+.xChar {
+  color: red;
+  background-color: #FFCCCB;
+}
+
+.oChar {
+  color: blue;
+  background-color: #ADD8EB;
 }
 
 .game {
@@ -48,7 +55,74 @@ ol, ul {
   align-items: center;
 }
 
+.header {
+  padding-top: 1vw;
+  font-size: 3vw;
+  line-height: 25px;
+}
 
-.game-info {
-  margin-left: 20px;
+.moves {
+  list-style:none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.button {
+  border: 1px solid #000;
+  font-size: 0.75vw;
+  font-weight: bold;
+  height: 1.5vw;
+  margin-bottom: -1px;
+  width: 10vw;
+  background: white;
+  font: 1vw "Century Gothic", Futura, sans-serif;
+  
+}
+
+.buttonX{
+  background: #FFCCCB;
+}
+
+.buttonO{
+  background: #ADD8EB;
+}
+
+.button:hover {
+  background: #eeeeee;
+}
+
+.result {
+  text-align: center;
+  font-size: 1.5vw;
+}
+
+.resultXWin {
+  text-align: center;
+  animation: blinker 2s linear infinite;
+  color: red;
+  font-size: 1.5vw;
+}
+
+.resultOWin {
+  text-align: center;
+  animation: blinker 2s linear infinite;
+  color: blue;
+  font-size: 1.5vw;
+
+}
+
+.resultTie {
+  text-align: center;
+  animation: blinker 2s linear infinite;
+  color: green;
+  font-size: 1.5vw;
+
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }

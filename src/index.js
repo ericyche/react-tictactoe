@@ -2,9 +2,26 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-function Square(props) {
+function Header() {
   return (
-    <button className="square" onClick={props.onClick}>
+    <h1 className="header">Tic Tac Toe</h1>
+  );
+}
+
+function Square(props) {
+  let className = "square";
+  if (props.value === "X") {
+    className = "square xChar"
+  } else if (props.value === "O") {
+    className = "square oChar"
+  } else if (props.status) {
+    className = "square oTurn";
+  } else {
+    className = "square xTurn";
+  }
+
+  return (
+    <button className={className} onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -12,10 +29,12 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
+    console.log(this.props.x)
     return (
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        status={this.props.status}
       />
     );
   }
@@ -58,7 +77,7 @@ class Game extends React.Component {
     const current = history[history.length - 1];
     const squares = current.squares.slice();
 
-    if (calculateWinner(squares) || squares[i]) {      
+    if (calculateWinner(squares) || squares[i]) {
       return;
     }
 
@@ -87,43 +106,56 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
+      let className = "button"
+      if (winner) {
+        if (winner == "X") {
+          className += " buttonX"
+        } else {
+          className += " buttonO"
+        }
+      }
+      else if (move > 0) {
+        className += move % 2 == 0 ? " buttonO" : " buttonX";
+      }
       const desc = move ? "Go to move #" + move : "Go to game state";
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button className={className} onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       );
     });
 
     let status;
-    if (winner) {
+    let resultClassName = "result"
+    if (this.state.stepNumber == 9 && !winner) {
+      status = "Result: Tie"
+      resultClassName = "resultTie"
+    } else if (winner) {
       status = "Winner : " + winner;
       if (winner == "X") {
-        document.body.style = 'background: red;';
-      }
-      else {
-        document.body.style = 'background: green;';
+        resultClassName = "resultXWin"
+      } else {
+        resultClassName = "resultOWin"
       }
     } else {
-      document.body.style = 'background: white;';
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
 
     return (
       <div className="game">
-
+        <Header />
         <div className="game-board">
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            status={this.state.xIsNext}
           />
         </div>
 
         <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
+          <div className={resultClassName}><h2>{status}</h2></div>
+          <div className="moves">{moves}</div>
         </div>
-
       </div>
     );
   }
